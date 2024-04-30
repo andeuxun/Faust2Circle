@@ -35,6 +35,9 @@
 #include <circle/sound/soundbasedevice.h>
 #include <circle/types.h>
 #include "oscillator.h"
+#include <circle/i2cmaster.h>
+#include <circle/sound/pwmsoundbasedevice.h>
+#include <circle/string.h>
 
 #ifdef USE_VCHIQ_SOUND
 	#include <vc4/vchiq/vchiqdevice.h>
@@ -83,6 +86,23 @@ private:
 	CVCHIQDevice		m_VCHIQ;
 #endif
 	CSoundBaseDevice	*m_pSound;
+};
+
+class CTest : public CPWMSoundBaseDevice
+{
+public:
+	CTest (CSynthConfig *pConfig, CInterruptSystem *pInterrupt);
+
+	boolean Start (void);
+	boolean IsActive (void);
+
+private:
+	unsigned GetChunk (u32 *pBuffer, unsigned nChunkSize);
+
+private:
+	unsigned m_nMaxLevel;
+	unsigned m_nNullLevel;
+	boolean m_bChannelsSwapped;
 
 	COscillator m_LFO;
 	COscillator m_VFO;

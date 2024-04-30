@@ -201,15 +201,7 @@ TShutdownMode CKernel::Run (void)
 	m_Logger.Write (FromKernel, LogNotice, "Playing modulated 440 Hz tone");
 
 	// output sound data
-	for (unsigned nCount = 0; m_pSound->IsActive (); nCount++)
-	{
-		m_Scheduler.MsSleep (QUEUE_SIZE_MSECS / 2);
-
-		// fill the whole queue free space with data
-		WriteSoundData (nQueueSizeFrames - m_pSound->GetQueueFramesAvail ());
-
-		m_Screen.Rotor (0, nCount);
-	}
+	WriteSoundData (nQueueSizeFrames - m_pSound->GetQueueFramesAvail ());
 
 	return ShutdownHalt;
 }
@@ -223,7 +215,7 @@ void CKernel::WriteSoundData (unsigned nFrames)
 	{
 		unsigned nWriteFrames = nFrames < nFramesPerWrite ? nFrames : nFramesPerWrite;
 
-		GetSoundData (Buffer, nWriteFrames);
+		GetChunk (Buffer, nWriteFrames);
 
 		unsigned nWriteBytes = nWriteFrames * WRITE_CHANNELS * TYPE_SIZE;
 
@@ -259,3 +251,69 @@ void CKernel::GetSoundData (void *pBuffer, unsigned nFrames)
 #endif
 	}
 }
+
+unsigned CTest::GetChunk (u32 *pBuffer, unsigned nChunkSize)
+{
+#ifdef SHOW_STATUS
+	unsigned nTicks = CTimer::GetClockTicks ();
+#endif
+
+	GlobalLock ();
+
+	unsigned nResult = nChunkSize;
+
+	float fVolumeLevel = m_fVolume * m_nMaxLevel/2;
+
+	for (; nChunkSize > 0; nChunkSize -= 2)		// fill the whole buffer
+	{
+		m_LFO.NextSample ();
+		m_VFO.NextSample ();
+
+		float fLevelLeft = m_VFO.GetOutputLevelLeft ();
+		int nLevelLeft = (int) (fLevelLeft*fVolumeLevel + m_nNullLevel);
+		if (nLevelLeft > (int) m_nMaxLevel)
+		{
+			nLevelLeft = m_nMaxLevel;
+		}
+		else if (nLevelLeft < 0)
+		{
+			nLevelLeft = 0;
+		}
+
+		float fLevelRight = m_VFO.GetOutputLevelRight ();
+		int nLevelRight = (int) (fLevelRight*fVolumeLevel + m_nNullLevel);
+		if (nLevelRight > (int) m_nMaxLevel)
+		{
+			nLevelRight = m_nMaxLevel;
+		}
+		else if (nLevelRight < 0)
+		{
+			nLevelRight = 0;
+		}
+
+		// for 2 stereo channels
+		if (!m_bChannelsSwapped)
+		{
+			*pBuffer++ = (u32) nLevelLeft;
+			*pBuffer++ = (u32) nLevelRight;
+		}
+		else
+		{
+			*pBuffer++ = (u32) nLevelRight;
+			*pBuffer++ = (u32) nLevelLeft;
+		}
+	}
+
+#ifdef SHOW_STATUS
+	nTicks = CTimer::GetClockTicks () - nTicks;
+	if (nTicks > m_nMaxDelayTicks)
+	{
+		m_nMaxDelayTicks = nTicks;
+	}
+#endif
+
+	GlobalUnlock ();
+
+	return nResult;
+}
+
