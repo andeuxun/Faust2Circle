@@ -108,7 +108,7 @@ boolean CKernel::Initialize (void)
 	{
 		bOK = m_Timer.Initialize ();
 	}
-
++
 #if RASPPI <= 4
 	if (bOK)
 	{
