@@ -26,6 +26,7 @@
 #include <circle/machineinfo.h>
 #include <circle/util.h>
 #include <assert.h>
+#include "oscillator.h"
 
 #ifdef USE_VCHIQ_SOUND
 	#include <vc4/sound/vchiqsoundbasedevice.h>
