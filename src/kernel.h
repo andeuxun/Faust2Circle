@@ -80,7 +80,7 @@ private:
 #ifdef USE_VCHIQ_SOUND
 	CVCHIQDevice		m_VCHIQ;
 #endif
-	CTest m_Sound;
+	CTest (m_Sound);
 };
 
 class CTest : public CPWMSoundBaseDevice
@@ -99,6 +99,8 @@ private:
 	unsigned m_nNullLevel;
 	boolean m_bChannelsSwapped;
 
+
+	CSoundBaseDevice	m_Sound;
 	COscillator m_LFO;
 	COscillator m_VFO;
 };
