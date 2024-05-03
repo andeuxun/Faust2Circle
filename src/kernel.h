@@ -104,6 +104,8 @@ private:
 	CVCHIQDevice		m_VCHIQ;
 #endif
 	CTest m_Sound;
+	CTest m_LFO;
+	CTest m_VFO;
 };
 
 

@@ -64,7 +64,6 @@ CKernel::CKernel (void)
 #ifdef USE_VCHIQ_SOUND
 	m_VCHIQ (CMemorySystem::Get (), &m_Interrupt),
 #endif
-	m_pSound (0),
 	m_VFO (&m_LFO)		// LFO modulates the VFO
 {
 	m_ActLED.Blink (5);	// show we are alive
@@ -108,7 +107,7 @@ boolean CKernel::Initialize (void)
 	{
 		bOK = m_Timer.Initialize ();
 	}
-+
+
 #if RASPPI <= 4
 	if (bOK)
 	{
@@ -145,7 +144,7 @@ TShutdownMode CKernel::Run (void)
 
 	// configure sound device
 	
-	m_Sound.start ();
+	m_Sound.Start ();
 
 	// main loop
 
@@ -178,46 +177,18 @@ unsigned CTest::GetChunk (u32 *pBuffer, unsigned nChunkSize)
 
 	unsigned nResult = nChunkSize;
 
-	float fVolumeLevel = m_fVolume * m_nMaxLevel/2;
+	float fVolumeLevel = nResult * m_nMaxLevel/2;
 
 	for (; nChunkSize > 0; nChunkSize -= 2)		// fill the whole buffer
 	{
 		m_LFO.NextSample ();
 		m_VFO.NextSample ();
 
-		float fLevelLeft = m_VFO.GetOutputLevelLeft ();
-		int nLevelLeft = (int) (fLevelLeft*fVolumeLevel + m_nNullLevel);
-		if (nLevelLeft > (int) m_nMaxLevel)
-		{
-			nLevelLeft = m_nMaxLevel;
-		}
-		else if (nLevelLeft < 0)
-		{
-			nLevelLeft = 0;
-		}
+		float fLevel = m_VFO.GetOutputLevel ();
 
-		float fLevelRight = m_VFO.GetOutputLevelRight ();
-		int nLevelRight = (int) (fLevelRight*fVolumeLevel + m_nNullLevel);
-		if (nLevelRight > (int) m_nMaxLevel)
-		{
-			nLevelRight = m_nMaxLevel;
-		}
-		else if (nLevelRight < 0)
-		{
-			nLevelRight = 0;
-		}
+		TYPE nLevel = (TYPE) (fLevel*VOLUME * FACTOR + NULL_LEVEL);
 
-		// for 2 stereo channels
-		if (!m_bChannelsSwapped)
-		{
-			*pBuffer++ = (u32) nLevelLeft;
-			*pBuffer++ = (u32) nLevelRight;
-		}
-		else
-		{
-			*pBuffer++ = (u32) nLevelRight;
-			*pBuffer++ = (u32) nLevelLeft;
-		}
+		*pBuffer++ = (u32) nLevel;
 	}
 
 #ifdef SHOW_STATUS
