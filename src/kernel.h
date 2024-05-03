@@ -54,6 +54,8 @@ class CTest : public CPWMSoundBaseDevice
 {
 public:
 	CTest (CSynthConfig *pConfig, CInterruptSystem *pInterrupt);
+	~CTest ();
+
 
 	boolean Start (void);
 	boolean IsActive (void);
@@ -101,7 +103,7 @@ private:
 #ifdef USE_VCHIQ_SOUND
 	CVCHIQDevice		m_VCHIQ;
 #endif
-	CTest (m_Sound);
+	CTest m_Sound;
 };
 
 
