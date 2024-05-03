@@ -50,6 +50,27 @@ enum TShutdownMode
 	ShutdownReboot
 };
 
+class CTest : public CPWMSoundBaseDevice
+{
+public:
+	CTest (CSynthConfig *pConfig, CInterruptSystem *pInterrupt);
+
+	boolean Start (void);
+	boolean IsActive (void);
+
+private:
+	unsigned GetChunk (u32 *pBuffer, unsigned nChunkSize);
+
+private:
+	unsigned m_nMaxLevel;
+	unsigned m_nNullLevel;
+	boolean m_bChannelsSwapped;
+
+	COscillator m_LFO;
+	COscillator m_VFO;
+};
+
+
 class CKernel
 {
 public:
@@ -83,26 +104,5 @@ private:
 	CTest (m_Sound);
 };
 
-class CTest : public CPWMSoundBaseDevice
-{
-public:
-	CTest (CSynthConfig *pConfig, CInterruptSystem *pInterrupt);
-
-	boolean Start (void);
-	boolean IsActive (void);
-
-private:
-	unsigned GetChunk (u32 *pBuffer, unsigned nChunkSize);
-
-private:
-	unsigned m_nMaxLevel;
-	unsigned m_nNullLevel;
-	boolean m_bChannelsSwapped;
-
-
-	CSoundBaseDevice	m_Sound;
-	COscillator m_LFO;
-	COscillator m_VFO;
-};
 
 #endif
