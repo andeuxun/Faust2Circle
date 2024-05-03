@@ -53,8 +53,8 @@ enum TShutdownMode
 class CTest : public CPWMSoundBaseDevice
 {
 public:
-	CTest (CSynthConfig *pConfig, CInterruptSystem *pInterrupt);
-	~CTest ();
+	CTest (void);
+	~CTest (void);
 
 
 	boolean Start (void);
