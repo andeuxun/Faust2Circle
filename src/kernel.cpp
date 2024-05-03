@@ -135,42 +135,6 @@ TShutdownMode CKernel::Run (void)
 {
 	m_Logger.Write (FromKernel, LogNotice, "Compile time: " __DATE__ " " __TIME__);
 
-	// select the sound device
-#if RASPPI <= 4
-	const char *pSoundDevice = m_Options.GetSoundDevice ();
-	if (strcmp (pSoundDevice, "sndpwm") == 0)
-	{
-		m_pSound = new CPWMSoundBaseDevice (&m_Interrupt, SAMPLE_RATE, CHUNK_SIZE);
-	}
-	else if (strcmp (pSoundDevice, "sndi2s") == 0)
-	{
-		m_pSound = new CI2SSoundBaseDevice (&m_Interrupt, SAMPLE_RATE, CHUNK_SIZE, FALSE,
-						    &m_I2CMaster, DAC_I2C_ADDRESS);
-	}
-	else if (strcmp (pSoundDevice, "sndhdmi") == 0)
-	{
-		m_pSound = new CHDMISoundBaseDevice (&m_Interrupt, SAMPLE_RATE, CHUNK_SIZE);
-	}
-#if RASPPI >= 4
-	else if (strcmp (pSoundDevice, "sndusb") == 0)
-	{
-		m_pSound = new CUSBSoundBaseDevice (SAMPLE_RATE);
-	}
-#endif
-	else
-	{
-#ifdef USE_VCHIQ_SOUND
-		m_pSound = new CVCHIQSoundBaseDevice (&m_VCHIQ, SAMPLE_RATE, CHUNK_SIZE,
-					(TVCHIQSoundDestination) m_Options.GetSoundOption ());
-#else
-		m_pSound = new CPWMSoundBaseDevice (&m_Interrupt, SAMPLE_RATE, CHUNK_SIZE);
-#endif
-	}
-#else
-	m_pSound = new CUSBSoundBaseDevice (SAMPLE_RATE);
-#endif
-	assert (m_pSound != 0);
-
 	// initialize oscillators
 	m_LFO.SetWaveform (WaveformSine);
 	m_LFO.SetFrequency (10.0);
@@ -180,76 +144,28 @@ TShutdownMode CKernel::Run (void)
 	m_VFO.SetModulationVolume (0.25);
 
 	// configure sound device
-	if (!m_pSound->AllocateQueue (QUEUE_SIZE_MSECS))
-	{
-		m_Logger.Write (FromKernel, LogPanic, "Cannot allocate sound queue");
-	}
+	
+	m_Sound.start ();
 
-	m_pSound->SetWriteFormat (FORMAT, WRITE_CHANNELS);
+	// main loop
 
-	// initially fill the whole queue with data
-	unsigned nQueueSizeFrames = m_pSound->GetQueueSizeFrames ();
-
-	WriteSoundData (nQueueSizeFrames);
-
-	// start sound device
-	if (!m_pSound->Start ())
-	{
-		m_Logger.Write (FromKernel, LogPanic, "Cannot start sound device");
-	}
-
-	m_Logger.Write (FromKernel, LogNotice, "Playing modulated 440 Hz tone");
-
-	// output sound data
-	WriteSoundData (nQueueSizeFrames - m_pSound->GetQueueFramesAvail ());
+	while (m_Sound.IsActive ()) {
+        // Just loop here for as long as sound is active.
+        // I know it's a bit weird, but no audio processing actually happens here;
+        // It all takes place in CTest::GetChunk
+    }
 
 	return ShutdownHalt;
 }
 
-void CKernel::WriteSoundData (unsigned nFrames)
+boolean CTest::Start (void)
 {
-	const unsigned nFramesPerWrite = 1000;
-	u8 Buffer[nFramesPerWrite * WRITE_CHANNELS * TYPE_SIZE];
-
-	while (nFrames > 0)
-	{
-		unsigned nWriteFrames = nFrames < nFramesPerWrite ? nFrames : nFramesPerWrite;
-
-		GetChunk (Buffer, nWriteFrames);
-
-		unsigned nWriteBytes = nWriteFrames * WRITE_CHANNELS * TYPE_SIZE;
-
-		int nResult = m_pSound->Write (Buffer, nWriteBytes);
-		if (nResult != (int) nWriteBytes)
-		{
-			m_Logger.Write (FromKernel, LogError, "Sound data dropped");
-		}
-
-		nFrames -= nWriteFrames;
-
-		m_Scheduler.Yield ();		// ensure the VCHIQ tasks can run
-	}
+	return CPWMSoundBaseDevice::Start ();
 }
 
-void CKernel::GetSoundData (void *pBuffer, unsigned nFrames)
+boolean CTest::IsActive (void)
 {
-	u8 *pBuffer8 = (u8 *) pBuffer;
-
-	unsigned nSamples = nFrames * WRITE_CHANNELS;
-
-	for (unsigned i = 0; i < nSamples;)
-	{
-		m_LFO.NextSample ();
-		m_VFO.NextSample ();
-
-		float fLevel = m_VFO.GetOutputLevel ();
-		TYPE nLevel = (TYPE) (fLevel*VOLUME * FACTOR + NULL_LEVEL);
-
-		memcpy (&pBuffer8[i++ * TYPE_SIZE], &nLevel, TYPE_SIZE);
-#if WRITE_CHANNELS == 2
-		memcpy (&pBuffer8[i++ * TYPE_SIZE], &nLevel, TYPE_SIZE);
-#endif
-	}
+	return CPWMSoundBaseDevice::IsActive ();
 }
 
 unsigned CTest::GetChunk (u32 *pBuffer, unsigned nChunkSize)
@@ -258,7 +174,7 @@ unsigned CTest::GetChunk (u32 *pBuffer, unsigned nChunkSize)
 	unsigned nTicks = CTimer::GetClockTicks ();
 #endif
 
-	GlobalLock ();
+	//GlobalLock ();
 
 	unsigned nResult = nChunkSize;
 
@@ -312,7 +228,7 @@ unsigned CTest::GetChunk (u32 *pBuffer, unsigned nChunkSize)
 	}
 #endif
 
-	GlobalUnlock ();
+	//GlobalUnlock ();
 
 	return nResult;
 }

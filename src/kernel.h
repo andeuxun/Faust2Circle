@@ -61,11 +61,6 @@ public:
 	TShutdownMode Run (void);
 
 private:
-	void WriteSoundData (unsigned nFrames);
-
-	void GetSoundData (void *pBuffer, unsigned nFrames);
-
-private:
 	// do not change this order
 	CActLED			m_ActLED;
 	CKernelOptions		m_Options;
@@ -85,7 +80,7 @@ private:
 #ifdef USE_VCHIQ_SOUND
 	CVCHIQDevice		m_VCHIQ;
 #endif
-	CSoundBaseDevice	*m_pSound;
+	CTest m_Sound;
 };
 
 class CTest : public CPWMSoundBaseDevice
