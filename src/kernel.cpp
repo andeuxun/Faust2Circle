@@ -54,7 +54,7 @@
 
 static const char FromKernel[] = "kernel";
 
-CKernel::CKernel (void)
+CKernel::CKernel (void) 
 :	m_Screen (m_Options.GetWidth (), m_Options.GetHeight ()),
 	m_Timer (&m_Interrupt),
 	m_Logger (m_Options.GetLogLevel (), &m_Timer),
@@ -63,9 +63,9 @@ CKernel::CKernel (void)
 #endif
 	m_USBHCI (&m_Interrupt, &m_Timer, FALSE),
 #ifdef USE_VCHIQ_SOUND
-	m_VCHIQ (CMemorySystem::Get (), &m_Interrupt),
+	m_VCHIQ (CMemorySystem::Get (), &m_Interrupt)
 #endif
-	//m_VFO (&m_LFO)		// LFO modulates the VFO
+		// LFO modulates the VFO
 {
 	m_ActLED.Blink (5);	// show we are alive
 }
@@ -152,8 +152,8 @@ TShutdownMode CKernel::Run (void)
 	return ShutdownHalt;
 }
 
-boolean CTest::Start (void) :
-	m_VFO (&m_LFO)		// LFO modulates the VFO
+CTest::CTest(void) :
+	m_VFO (&m_LFO)
 {
 	// initialize oscillators
 	m_LFO.SetWaveform (WaveformSine);
@@ -163,6 +163,10 @@ boolean CTest::Start (void) :
 	m_VFO.SetFrequency (440.0);
 	m_VFO.SetModulationVolume (0.25);
 
+}
+
+boolean CTest::Start (void) 
+{
 	return CPWMSoundBaseDevice::Start ();
 }
 

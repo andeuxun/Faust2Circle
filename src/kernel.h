@@ -52,9 +52,10 @@ enum TShutdownMode
 
 class CTest : public CPWMSoundBaseDevice
 {
+
 public:
 	CTest (void);
-	~CTest (void);
+	
 
 
 	boolean Start (void);
