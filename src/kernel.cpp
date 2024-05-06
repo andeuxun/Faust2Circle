@@ -65,7 +65,7 @@ CKernel::CKernel (void)
 #ifdef USE_VCHIQ_SOUND
 	m_VCHIQ (CMemorySystem::Get (), &m_Interrupt),
 #endif
-	m_VFO (&m_LFO)		// LFO modulates the VFO
+	//m_VFO (&m_LFO)		// LFO modulates the VFO
 {
 	m_ActLED.Blink (5);	// show we are alive
 }
@@ -152,7 +152,8 @@ TShutdownMode CKernel::Run (void)
 	return ShutdownHalt;
 }
 
-boolean CTest::Start (void)
+boolean CTest::Start (void) :
+	m_VFO (&m_LFO)		// LFO modulates the VFO
 {
 	// initialize oscillators
 	m_LFO.SetWaveform (WaveformSine);
