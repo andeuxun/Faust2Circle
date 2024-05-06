@@ -66,7 +66,7 @@ CKernel::CKernel (void)
 	m_VCHIQ (CMemorySystem::Get (), &m_Interrupt),
 #endif
 	m_VFO (&m_LFO)		// LFO modulates the VFO
-{à
+{
 	m_ActLED.Blink (5);	// show we are alive
 }
 
