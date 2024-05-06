@@ -66,7 +66,7 @@ CKernel::CKernel (void)
 	m_VCHIQ (CMemorySystem::Get (), &m_Interrupt),
 #endif
 	m_VFO (&m_LFO)		// LFO modulates the VFO
-{
+{à
 	m_ActLED.Blink (5);	// show we are alive
 }
 
@@ -135,13 +135,7 @@ TShutdownMode CKernel::Run (void)
 {
 	m_Logger.Write (FromKernel, LogNotice, "Compile time: " __DATE__ " " __TIME__);
 
-	// initialize oscillators
-	m_LFO.SetWaveform (WaveformSine);
-	m_LFO.SetFrequency (10.0);
 
-	m_VFO.SetWaveform (WaveformSine);
-	m_VFO.SetFrequency (440.0);
-	m_VFO.SetModulationVolume (0.25);
 
 	// configure sound device
 	
@@ -160,6 +154,14 @@ TShutdownMode CKernel::Run (void)
 
 boolean CTest::Start (void)
 {
+	// initialize oscillators
+	m_LFO.SetWaveform (WaveformSine);
+	m_LFO.SetFrequency (10.0);
+
+	m_VFO.SetWaveform (WaveformSine);
+	m_VFO.SetFrequency (440.0);
+	m_VFO.SetModulationVolume (0.25);
+
 	return CPWMSoundBaseDevice::Start ();
 }
 
@@ -189,6 +191,7 @@ unsigned CTest::GetChunk (u32 *pBuffer, unsigned nChunkSize)
 
 		TYPE nLevel = (TYPE) (fLevel*VOLUME * FACTOR + NULL_LEVEL);
 
+		*pBuffer++ = (u32) nLevel;
 		*pBuffer++ = (u32) nLevel;
 	}
 
