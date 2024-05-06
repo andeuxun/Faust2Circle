@@ -61,9 +61,9 @@ CKernel::CKernel (void)
 #if RASPPI <= 4
 	m_I2CMaster (CMachineInfo::Get ()->GetDevice (DeviceI2CMaster), TRUE),
 #endif
-	m_USBHCI (&m_Interrupt, &m_Timer, FALSE),
+	m_USBHCI (&m_Interrupt, &m_Timer, FALSE)
 #ifdef USE_VCHIQ_SOUND
-	m_VCHIQ (CMemorySystem::Get (), &m_Interrupt),
+	, m_VCHIQ (CMemorySystem::Get (), &m_Interrupt)
 #endif
 {
 	m_ActLED.Blink (5);	// show we are alive
