@@ -63,9 +63,8 @@ CKernel::CKernel (void)
 #endif
 	m_USBHCI (&m_Interrupt, &m_Timer, FALSE),
 #ifdef USE_VCHIQ_SOUND
-	m_VCHIQ (CMemorySystem::Get (), &m_Interrupt)
+	m_VCHIQ (CMemorySystem::Get (), &m_Interrupt),
 #endif
-		// LFO modulates the VFO
 {
 	m_ActLED.Blink (5);	// show we are alive
 }
