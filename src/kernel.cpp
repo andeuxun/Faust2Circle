@@ -133,9 +133,6 @@ boolean CKernel::Initialize (void)
 TShutdownMode CKernel::Run (void)
 {
 	m_Logger.Write (FromKernel, LogNotice, "Compile time: " __DATE__ " " __TIME__);
-
-
-
 	// configure sound device
 	
 	m_Sound.Start ();
@@ -151,7 +148,8 @@ TShutdownMode CKernel::Run (void)
 	return ShutdownHalt;
 }
 
-CTest::CTest(void) :
+CTest::CTest(void) 
+:
 	m_VFO (&m_LFO)
 {
 	// initialize oscillators

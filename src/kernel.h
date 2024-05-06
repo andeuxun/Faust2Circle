@@ -55,8 +55,6 @@ class CTest : public CPWMSoundBaseDevice
 
 public:
 	CTest (void);
-	
-
 
 	boolean Start (void);
 	boolean IsActive (void);
