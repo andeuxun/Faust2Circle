@@ -81,12 +81,12 @@ private:
 class CKernel
 {
 public:
-	CKernel ((CInterruptSystem *pInterrupt,
+	CKernel (CInterruptSystem *pInterrupt,
 			     unsigned	       nSampleRate = 48000,
-			     unsigned	       nChunkSize  = 256););
-	~CKernel ((CInterruptSystem *pInterrupt,
+			     unsigned	       nChunkSize  = 256);
+	~CKernel (CInterruptSystem *pInterrupt,
 			     unsigned	       nSampleRate = 48000,
-			     unsigned	       nChunkSize  = 256););
+			     unsigned	       nChunkSize  = 256);
 
 	boolean Initialize (void);
 
