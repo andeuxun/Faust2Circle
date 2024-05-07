@@ -54,7 +54,9 @@
 
 static const char FromKernel[] = "kernel";
 
-CKernel::CKernel (void) 
+CKernel::CKernel (CInterruptSystem *pInterrupt,
+			     nSampleRate,
+			     nChunkSize)
 :	m_Screen (m_Options.GetWidth (), m_Options.GetHeight ()),
 	m_Timer (&m_Interrupt),
 	m_Logger (m_Options.GetLogLevel (), &m_Timer),
@@ -70,7 +72,9 @@ CKernel::CKernel (void)
 	m_ActLED.Blink (5);	// show we are alive
 }
 
-CKernel::~CKernel (void)
+CKernel::~CKernel (CInterruptSystem *pInterrupt,
+			     nSampleRate,
+			     nChunkSize)
 {
 }
 
@@ -155,7 +159,7 @@ CTest::CTest(CInterruptSystem *pInterrupt, unsigned nSampleRate, unsigned nChunk
 	m_pInterrupt(pInterrupt),
 	m_nSampleRate(nSampleRate),
 	m_nChunkSize(nChunkSize)
-	
+
 {
 	// initialize oscillators
 	m_LFO.SetWaveform (WaveformSine);
