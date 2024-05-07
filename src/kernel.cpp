@@ -65,7 +65,7 @@ CKernel::CKernel (void)
 #ifdef USE_VCHIQ_SOUND
 	m_VCHIQ (CMemorySystem::Get (), &m_Interrupt),
 #endif
-	m_Sound (&m_pInterrupt, m_nSampleRate, m_nChunkSize)
+	m_Sound (&m_Interrupt)
 {
 	m_ActLED.Blink (5);	// show we are alive
 }
