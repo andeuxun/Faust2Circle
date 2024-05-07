@@ -155,6 +155,7 @@ CTest::CTest(CInterruptSystem *pInterrupt, unsigned nSampleRate, unsigned nChunk
 	m_pInterrupt(pInterrupt),
 	m_nSampleRate(nSampleRate),
 	m_nChunkSize(nChunkSize)
+	
 {
 	// initialize oscillators
 	m_LFO.SetWaveform (WaveformSine);
