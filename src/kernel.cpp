@@ -72,9 +72,7 @@ CKernel::CKernel (CInterruptSystem *pInterrupt,
 	m_ActLED.Blink (5);	// show we are alive
 }
 
-CKernel::~CKernel (CInterruptSystem *pInterrupt,
-			     nSampleRate,
-			     nChunkSize)
+CKernel::~CKernel (void)
 {
 }
 

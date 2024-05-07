@@ -84,9 +84,7 @@ public:
 	CKernel (CInterruptSystem *pInterrupt,
 			     unsigned	       nSampleRate = 48000,
 			     unsigned	       nChunkSize  = 256);
-	~CKernel (CInterruptSystem *pInterrupt,
-			     unsigned	       nSampleRate = 48000,
-			     unsigned	       nChunkSize  = 256);
+	~CKernel (void);
 
 	boolean Initialize (void);
 
