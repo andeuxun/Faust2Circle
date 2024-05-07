@@ -150,7 +150,7 @@ TShutdownMode CKernel::Run (void)
 }
 
 CTest::CTest(CInterruptSystem *pInterrupt, unsigned nSampleRate, unsigned nChunkSize) 
-:
+:	CPWMSoundBaseDevice (pInterrupt, nSampleRate, nChunkSize),
 	m_VFO (&m_LFO),
 	m_pInterrupt(pInterrupt),
 	m_nSampleRate(nSampleRate),
