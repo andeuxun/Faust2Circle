@@ -81,9 +81,7 @@ private:
 class CKernel
 {
 public:
-	CKernel (CInterruptSystem *pInterrupt,
-			     unsigned	       nSampleRate = 48000,
-			     unsigned	       nChunkSize  = 256);
+	CKernel (void);
 	~CKernel (void);
 
 	boolean Initialize (void);
@@ -111,10 +109,6 @@ private:
 	CVCHIQDevice		m_VCHIQ;
 #endif
 	CTest m_Sound;
-
-	CInterruptSystem *m_pInterrupt;
-	unsigned m_nChunkSize;
-	unsigned m_nSampleRate;
 };
 
 
