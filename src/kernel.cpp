@@ -141,13 +141,13 @@ TShutdownMode CKernel::Run (void)
 	while (m_Sound.IsActive ()) {
         // Just loop here for as long as sound is active.
         // I know it's a bit weird, but no audio processing actually happens here;
-        // It all takes place in CTest::GetChunk
+        // It all takes place in CFaust2Circle::GetChunk
     }
 
 	return ShutdownHalt;
 }
 
-CTest::CTest(CInterruptSystem *pInterrupt, unsigned nSampleRate, unsigned nChunkSize) 
+CFaust2Circle::CFaust2Circle(CInterruptSystem *pInterrupt, unsigned nSampleRate, unsigned nChunkSize) 
 :	CPWMSoundBaseDevice (pInterrupt, nSampleRate, nChunkSize),
 	m_VFO (&m_LFO),	
 {
@@ -161,27 +161,27 @@ CTest::CTest(CInterruptSystem *pInterrupt, unsigned nSampleRate, unsigned nChunk
 
 }
 
-void CTest::GlobalLock (void)
+void CFaust2Circle::GlobalLock (void)
 {
 	EnterCritical (IRQ_LEVEL);
 }
 
-void CTest::GlobalUnlock (void)
+void CFaust2Circle::GlobalUnlock (void)
 {
 	LeaveCritical ();
 }
 
-boolean CTest::Start (void) 
+boolean CFaust2Circle::Start (void) 
 {
 	return CPWMSoundBaseDevice::Start ();
 }
 
-boolean CTest::IsActive (void)
+boolean CFaust2Circle::IsActive (void)
 {
 	return CPWMSoundBaseDevice::IsActive ();
 }
 
-unsigned CTest::GetChunk (u32 *pBuffer, unsigned nChunkSize)
+unsigned CFaust2Circle::GetChunk (u32 *pBuffer, unsigned nChunkSize)
 {
 #ifdef SHOW_STATUS
 	unsigned nTicks = CTimer::GetClockTicks ();

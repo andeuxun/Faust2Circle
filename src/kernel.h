@@ -50,11 +50,11 @@ enum TShutdownMode
 	ShutdownReboot
 };
 
-class CTest : public CPWMSoundBaseDevice
+class CFaust2Circle : public CPWMSoundBaseDevice
 {
 
 public:
-	CTest (CInterruptSystem *pInterrupt,
+	CFaust2Circle (CInterruptSystem *pInterrupt,
 			     unsigned	       nSampleRate = 48000,
 			     unsigned	       nChunkSize  = 256);
 
@@ -108,7 +108,7 @@ private:
 #ifdef USE_VCHIQ_SOUND
 	CVCHIQDevice		m_VCHIQ;
 #endif
-	CTest m_Sound;
+	CFaust2Circle m_Sound;
 };
 
 
