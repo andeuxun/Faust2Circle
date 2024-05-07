@@ -148,9 +148,12 @@ TShutdownMode CKernel::Run (void)
 	return ShutdownHalt;
 }
 
-CTest::CTest(void) 
+CTest::CTest(CInterruptSystem *pInterrupt, unsigned nSampleRate, unsigned nChunkSize) 
 :
 	m_VFO (&m_LFO)
+	m_pInterrupt(pInterrupt),
+	m_nSampleRate(nSampleRate),Z
+	m_nChunkSize(nChunkSize)
 {
 	// initialize oscillators
 	m_LFO.SetWaveform (WaveformSine);
