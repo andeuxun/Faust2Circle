@@ -61,14 +61,14 @@ public:
 	boolean Start (void);
 	boolean IsActive (void);
 
+protected:
+	void GlobalLock (void);
+	void GlobalUnlock (void);
+
 private:
 	unsigned GetChunk (u32 *pBuffer, unsigned nChunkSize);
 
 private:
-	CInterruptSystem *m_pInterrupt;
-	unsigned m_nChunkSize;
-	unsigned m_nSampleRate;
-
 	unsigned m_nMaxLevel;
 	unsigned m_nNullLevel;
 	boolean m_bChannelsSwapped;

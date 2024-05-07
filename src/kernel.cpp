@@ -27,6 +27,7 @@
 #include <circle/util.h>
 #include <assert.h>
 #include "oscillator.h"
+#include <circle/synchronize.h>
 
 #ifdef USE_VCHIQ_SOUND
 	#include <vc4/sound/vchiqsoundbasedevice.h>
@@ -134,11 +135,8 @@ boolean CKernel::Initialize (void)
 TShutdownMode CKernel::Run (void)
 {
 	m_Logger.Write (FromKernel, LogNotice, "Compile time: " __DATE__ " " __TIME__);
-	// configure sound device
 	
 	m_Sound.Start ();
-
-	// main loop
 
 	while (m_Sound.IsActive ()) {
         // Just loop here for as long as sound is active.
@@ -151,11 +149,7 @@ TShutdownMode CKernel::Run (void)
 
 CTest::CTest(CInterruptSystem *pInterrupt, unsigned nSampleRate, unsigned nChunkSize) 
 :	CPWMSoundBaseDevice (pInterrupt, nSampleRate, nChunkSize),
-	m_VFO (&m_LFO),
-	m_pInterrupt(pInterrupt),
-	m_nSampleRate(nSampleRate),
-	m_nChunkSize(nChunkSize)
-	
+	m_VFO (&m_LFO),	
 {
 	// initialize oscillators
 	m_LFO.SetWaveform (WaveformSine);
@@ -165,6 +159,16 @@ CTest::CTest(CInterruptSystem *pInterrupt, unsigned nSampleRate, unsigned nChunk
 	m_VFO.SetFrequency (440.0);
 	m_VFO.SetModulationVolume (0.25);
 
+}
+
+void CTest::GlobalLock (void)
+{
+	EnterCritical (IRQ_LEVEL);
+}
+
+void CTest::GlobalUnlock (void)
+{
+	LeaveCritical ();
 }
 
 boolean CTest::Start (void) 
@@ -183,7 +187,7 @@ unsigned CTest::GetChunk (u32 *pBuffer, unsigned nChunkSize)
 	unsigned nTicks = CTimer::GetClockTicks ();
 #endif
 
-	//GlobalLock ();
+	GlobalLock ();
 
 	unsigned nResult = nChunkSize;
 
@@ -210,7 +214,7 @@ unsigned CTest::GetChunk (u32 *pBuffer, unsigned nChunkSize)
 	}
 #endif
 
-	//GlobalUnlock ();
+	GlobalUnlock ();
 
 	return nResult;
 }
