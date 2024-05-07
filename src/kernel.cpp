@@ -149,7 +149,7 @@ TShutdownMode CKernel::Run (void)
 
 CFaust2Circle::CFaust2Circle(CInterruptSystem *pInterrupt, unsigned nSampleRate, unsigned nChunkSize) 
 :	CPWMSoundBaseDevice (pInterrupt, nSampleRate, nChunkSize),
-	m_VFO (&m_LFO),	
+	m_VFO (&m_LFO)
 {
 	// initialize oscillators
 	m_LFO.SetWaveform (WaveformSine);
