@@ -61,9 +61,9 @@ CKernel::CKernel (void)
 #if RASPPI <= 4
 	m_I2CMaster (CMachineInfo::Get ()->GetDevice (DeviceI2CMaster), TRUE),
 #endif
-	m_USBHCI (&m_Interrupt, &m_Timer, FALSE)
+	m_USBHCI (&m_Interrupt, &m_Timer, FALSE),
 #ifdef USE_VCHIQ_SOUND
-	, m_VCHIQ (CMemorySystem::Get (), &m_Interrupt)
+	m_VCHIQ (CMemorySystem::Get (), &m_Interrupt),
 #endif
 	m_Sound (&m_pInterrupt, m_nSampleRate, m_nChunkSize)
 {
@@ -151,7 +151,7 @@ TShutdownMode CKernel::Run (void)
 
 CTest::CTest(CInterruptSystem *pInterrupt, unsigned nSampleRate, unsigned nChunkSize) 
 :
-	m_VFO (&m_LFO)
+	m_VFO (&m_LFO),
 	m_pInterrupt(pInterrupt),
 	m_nSampleRate(nSampleRate),
 	m_nChunkSize(nChunkSize)
