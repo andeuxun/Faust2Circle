@@ -65,6 +65,7 @@ CKernel::CKernel (void)
 #ifdef USE_VCHIQ_SOUND
 	, m_VCHIQ (CMemorySystem::Get (), &m_Interrupt)
 #endif
+	m_Sound (&m_pInterrupt, m_nSampleRate, m_nChunkSize)
 {
 	m_ActLED.Blink (5);	// show we are alive
 }
@@ -152,7 +153,7 @@ CTest::CTest(CInterruptSystem *pInterrupt, unsigned nSampleRate, unsigned nChunk
 :
 	m_VFO (&m_LFO)
 	m_pInterrupt(pInterrupt),
-	m_nSampleRate(nSampleRate),Z
+	m_nSampleRate(nSampleRate),
 	m_nChunkSize(nChunkSize)
 {
 	// initialize oscillators

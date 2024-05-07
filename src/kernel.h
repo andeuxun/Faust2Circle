@@ -54,7 +54,9 @@ class CTest : public CPWMSoundBaseDevice
 {
 
 public:
-	CTest (void);
+	CTest (CInterruptSystem *pInterrupt,
+			     unsigned	       nSampleRate = 48000,
+			     unsigned	       nChunkSize  = 256);
 
 	boolean Start (void);
 	boolean IsActive (void);
@@ -63,6 +65,10 @@ private:
 	unsigned GetChunk (u32 *pBuffer, unsigned nChunkSize);
 
 private:
+	CInterruptSystem *m_pInterruptSystem;
+	unsigned m_nChunkSize;
+	unsigned m_nRange;
+
 	unsigned m_nMaxLevel;
 	unsigned m_nNullLevel;
 	boolean m_bChannelsSwapped;
