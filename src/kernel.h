@@ -61,15 +61,13 @@ public:
 	boolean Start (void);
 	boolean IsActive (void);
 
-	CInterruptSystem *m_pInterrupt;
-	unsigned m_nChunkSize;
-	unsigned m_nSampleRate;
-
 private:
 	unsigned GetChunk (u32 *pBuffer, unsigned nChunkSize);
 
 private:
-
+	CInterruptSystem *m_pInterrupt;
+	unsigned m_nChunkSize;
+	unsigned m_nSampleRate;
 
 	unsigned m_nMaxLevel;
 	unsigned m_nNullLevel;
