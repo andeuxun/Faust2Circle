@@ -54,9 +54,11 @@ class CFaust2Circle : public CPWMSoundBaseDevice
 {
 
 public:
+	unsigned nSampleRate = 48000;
+	unsigned nChunkSize  = 256;
 	CFaust2Circle (CInterruptSystem *pInterrupt,
-			     unsigned	       nSampleRate = 48000,
-			     unsigned	       nChunkSize  = 256);
+			 		nSampleRate,
+			    	nChunkSize);
 
 	boolean Start (void);
 	boolean IsActive (void);
@@ -68,16 +70,15 @@ protected:
 private:
 	unsigned GetChunk (u32 *pBuffer, unsigned nChunkSize);
 
-protected:
-	float m_fVolume;
-	
 private:
 	unsigned m_nMaxLevel;
 	unsigned m_nNullLevel;
-	boolean m_bChannelsSwapped;
 
-	COscillator m_LFO;
 	COscillator m_VFO;
+	COscillator m_LFO;
+
+protected:
+	float m_fVolume;
 };
 
 
