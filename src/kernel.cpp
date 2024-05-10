@@ -149,7 +149,10 @@ TShutdownMode CKernel::Run (void)
 
 CFaust2Circle::CFaust2Circle(CInterruptSystem *pInterrupt, unsigned nSampleRate, unsigned nChunkSize) 
 :	CPWMSoundBaseDevice (pInterrupt, nSampleRate, nChunkSize),
-	m_VFO (&m_LFO)
+	m_VFO (&m_LFO),
+	m_nMaxLevel (GetRangeMax ()-1), // GetRangeMax import
+	m_nNullLevel (m_nMaxLevel / 2),
+	m_fVolume (0.0)
 {
 	// initialize oscillators
 	m_LFO.SetWaveform (WaveformSine);
@@ -191,7 +194,7 @@ unsigned CFaust2Circle::GetChunk (u32 *pBuffer, unsigned nChunkSize)
 
 	unsigned nResult = nChunkSize;
 
-	float fVolumeLevel = nResult * m_nMaxLevel/2;
+	float fVolumeLevel = m_fVolume * m_nMaxLevel/2;
 
 	for (; nChunkSize > 0; nChunkSize -= 2)		// fill the whole buffer
 	{
@@ -200,7 +203,7 @@ unsigned CFaust2Circle::GetChunk (u32 *pBuffer, unsigned nChunkSize)
 
 		float fLevel = m_VFO.GetOutputLevel ();
 
-		TYPE nLevel = (TYPE) (fLevel*VOLUME * FACTOR + NULL_LEVEL);
+		TYPE nLevel = (TYPE) (fLevel*fVolumeLevel + m_nNullLevel);
 
 		*pBuffer++ = (u32) nLevel;
 		*pBuffer++ = (u32) nLevel;

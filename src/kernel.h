@@ -68,6 +68,9 @@ protected:
 private:
 	unsigned GetChunk (u32 *pBuffer, unsigned nChunkSize);
 
+protected:
+	float m_fVolume;
+	
 private:
 	unsigned m_nMaxLevel;
 	unsigned m_nNullLevel;
