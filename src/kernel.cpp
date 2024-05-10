@@ -152,7 +152,7 @@ CFaust2Circle::CFaust2Circle(CInterruptSystem *pInterrupt, unsigned nSampleRate,
 	m_VFO (&m_LFO),
 	m_nMaxLevel (GetRangeMax ()-1), // GetRangeMax import
 	m_nNullLevel (m_nMaxLevel / 2),
-	m_fVolume (0.0)
+	m_fVolume (1.0)
 {
 	// initialize oscillators
 	m_LFO.SetWaveform (WaveformSine);
