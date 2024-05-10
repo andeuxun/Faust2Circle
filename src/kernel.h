@@ -54,11 +54,9 @@ class CFaust2Circle : public CPWMSoundBaseDevice
 {
 
 public:
-	unsigned nSampleRate = 48000;
-	unsigned nChunkSize  = 256;
 	CFaust2Circle (CInterruptSystem *pInterrupt,
-			 		nSampleRate,
-			    	nChunkSize);
+			 		unsigned nSampleRate = 48000,
+			    	unsigned nChunkSize  = 256);
 
 	boolean Start (void);
 	boolean IsActive (void);
