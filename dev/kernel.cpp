@@ -37,7 +37,7 @@ CKernel::CKernel (void)
 #else
 	m_pUSB (new CUSBMIDIGadget (&m_Interrupt)),
 #endif
-	m_pMiniOrgan (0)
+	m_pFaust2Circle (0)
 {
 	m_ActLED.Blink (5);	// show we are alive
 }
@@ -83,9 +83,9 @@ boolean CKernel::Initialize (void)
 
 	if (bOK)
 	{
-		m_pMiniOrgan = new CMiniOrgan (&m_Interrupt, &m_I2CMaster);
+		m_pFaust2Circle = new m_pFaust2Circle (&m_Interrupt, 48000, 256);
 
-		bOK = m_pMiniOrgan->Initialize ();
+		bOK = m_pFaust2Circle->Initialize ();
 	}
 
 	return bOK;
@@ -97,15 +97,15 @@ TShutdownMode CKernel::Run (void)
 	
 	m_Logger.Write (FromKernel, LogNotice, "Just play!");
 
-	m_pMiniOrgan->Start ();
+	m_pFaust2Circle->Start ();
 
-	for (unsigned nCount = 0; m_pMiniOrgan->IsActive (); nCount++)
+	for (unsigned nCount = 0; m_pFaust2Circle->IsActive (); nCount++)
 	{
 		// This must be called from TASK_LEVEL to update the tree of connected USB devices.
 		assert (m_pUSB);
 		boolean bUpdated = m_pUSB->UpdatePlugAndPlay ();
 
-		m_pMiniOrgan->Process (bUpdated);
+		m_pFaust2Circle->Process (bUpdated);
 
 		m_Screen.Rotor (0, nCount);
 	}

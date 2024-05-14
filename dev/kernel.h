@@ -63,7 +63,7 @@ private:
 	CI2CMaster		m_I2CMaster;
 	CUSBController		*m_pUSB;
 
-	CMiniOrgan		*m_pMiniOrgan;
+	CFaust2Circle		*m_pFaust2Circle;
 };
 
 #endif
