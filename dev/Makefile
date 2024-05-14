@@ -11,7 +11,8 @@ LIBS	= $(CIRCLEHOME)/lib/usb/libusb.a \
 	  $(CIRCLEHOME)/lib/input/libinput.a \
 	  $(CIRCLEHOME)/lib/fs/libfs.a \
 	  $(CIRCLEHOME)/lib/sound/libsound.a \
-	  $(CIRCLEHOME)/lib/libcircle.a
+	  $(CIRCLEHOME)/lib/libcircle.a \
+	  /home/thibaud/faust/libraries.a
 
 include ../Rules.mk
 
