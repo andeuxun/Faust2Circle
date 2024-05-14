@@ -1,3 +1,12 @@
+/* ------------------------------------------------------------
+name: "example"
+Code generated with Faust 2.72.16 (https://faust.grame.fr)
+Compilation options: -a faust2circle.cpp -lang cpp -ct 1 -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
+------------------------------------------------------------ */
+
+#ifndef  __mydsp_H__
+#define  __mydsp_H__
+
 //
 // kernel.cpp
 //
@@ -54,6 +63,141 @@
 	#include <vc4/sound/vchiqsoundbasedevice.h>
 #endif
 
+/************************BEGIN DSP SECTION **************************/
+
+#ifndef FAUSTFLOAT
+#define FAUSTFLOAT float
+#endif 
+
+#include <algorithm>
+#include <cmath>
+#include <cstdint>
+#include <math.h>
+
+#ifndef FAUSTCLASS 
+#define FAUSTCLASS mydsp
+#endif
+
+#ifdef __APPLE__ 
+#define exp10f __exp10f
+#define exp10 __exp10
+#endif
+
+#if defined(_WIN32)
+#define RESTRICT __restrict
+#else
+#define RESTRICT __restrict__
+#endif
+
+
+class mydsp : public dsp {
+	
+ private:
+	
+	FAUSTFLOAT fHslider0;
+	int fSampleRate;
+	float fConst0;
+	float fConst1;
+	float fRec0[2];
+	FAUSTFLOAT fHslider1;
+	
+ public:
+	mydsp() {}
+
+	void metadata(Meta* m) { 
+		m->declare("compile_options", "-a faust2circle.cpp -lang cpp -ct 1 -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0");
+		m->declare("filename", "example.dsp");
+		m->declare("maths.lib/author", "GRAME");
+		m->declare("maths.lib/copyright", "GRAME");
+		m->declare("maths.lib/license", "LGPL with exception");
+		m->declare("maths.lib/name", "Faust Math Library");
+		m->declare("maths.lib/version", "2.8.0");
+		m->declare("name", "example");
+		m->declare("oscillators.lib/name", "Faust Oscillator Library");
+		m->declare("oscillators.lib/saw2ptr:author", "Julius O. Smith III");
+		m->declare("oscillators.lib/saw2ptr:license", "STK-4.3");
+		m->declare("oscillators.lib/version", "1.5.1");
+		m->declare("platform.lib/name", "Generic Platform Library");
+		m->declare("platform.lib/version", "1.3.0");
+	}
+
+	virtual int getNumInputs() {
+		return 0;
+	}
+	virtual int getNumOutputs() {
+		return 2;
+	}
+	
+	static void classInit(int sample_rate) {
+	}
+	
+	virtual void instanceConstants(int sample_rate) {
+		fSampleRate = sample_rate;
+		fConst0 = std::min<float>(1.92e+05f, std::max<float>(1.0f, float(fSampleRate)));
+		fConst1 = 1.0f / fConst0;
+	}
+	
+	virtual void instanceResetUserInterface() {
+		fHslider0 = FAUSTFLOAT(2e+02f);
+		fHslider1 = FAUSTFLOAT(0.5f);
+	}
+	
+	virtual void instanceClear() {
+		for (int l0 = 0; l0 < 2; l0 = l0 + 1) {
+			fRec0[l0] = 0.0f;
+		}
+	}
+	
+	virtual void init(int sample_rate) {
+		classInit(sample_rate);
+		instanceInit(sample_rate);
+	}
+	
+	virtual void instanceInit(int sample_rate) {
+		instanceConstants(sample_rate);
+		instanceResetUserInterface();
+		instanceClear();
+	}
+	
+	virtual mydsp* clone() {
+		return new mydsp();
+	}
+	
+	virtual int getSampleRate() {
+		return fSampleRate;
+	}
+	
+	virtual void buildUserInterface(UI* ui_interface) {
+		ui_interface->openVerticalBox("example");
+		ui_interface->addHorizontalSlider("freq", &fHslider0, FAUSTFLOAT(2e+02f), FAUSTFLOAT(5e+01f), FAUSTFLOAT(1e+03f), FAUSTFLOAT(0.01f));
+		ui_interface->addHorizontalSlider("gain", &fHslider1, FAUSTFLOAT(0.5f), FAUSTFLOAT(0.0f), FAUSTFLOAT(1.0f), FAUSTFLOAT(0.01f));
+		ui_interface->closeBox();
+	}
+	
+	virtual void compute(int count, FAUSTFLOAT** RESTRICT inputs, FAUSTFLOAT** RESTRICT outputs) {
+		FAUSTFLOAT* output0 = outputs[0];
+		FAUSTFLOAT* output1 = outputs[1];
+		float fSlow0 = std::max<float>(1.1920929e-07f, std::fabs(float(fHslider0)));
+		float fSlow1 = fConst1 * fSlow0;
+		float fSlow2 = 1.0f - fConst0 / fSlow0;
+		float fSlow3 = float(fHslider1);
+		for (int i0 = 0; i0 < count; i0 = i0 + 1) {
+			float fTemp0 = fSlow1 + fRec0[1] + -1.0f;
+			int iTemp1 = fTemp0 < 0.0f;
+			float fTemp2 = fSlow1 + fRec0[1];
+			fRec0[0] = ((iTemp1) ? fTemp2 : fTemp0);
+			float fRec1 = ((iTemp1) ? fTemp2 : fSlow1 + fRec0[1] + fSlow2 * fTemp0);
+			float fTemp3 = fSlow3 * (2.0f * fRec1 + -1.0f);
+			output0[i0] = FAUSTFLOAT(fTemp3);
+			output1[i0] = FAUSTFLOAT(fTemp3);
+			fRec0[1] = fRec0[0];
+		}
+	}
+
+};
+
+/**************************END DSP SECTION **************************/
+
 CFaust2Circle::CFaust2Circle(CInterruptSystem *pInterrupt, unsigned nSampleRate, unsigned nChunkSize) 
 :	CPWMSoundBaseDevice (pInterrupt, nSampleRate, nChunkSize),
 	
@@ -68,7 +212,7 @@ CFaust2Circle::CFaust2Circle(CInterruptSystem *pInterrupt, unsigned nSampleRate,
     fDSP = new mydsp();
 #endif
     
-    fDSP->init(AUDIO_SAMPLE_RATE_EXACT);
+    fDSP->init(nSampleRate);
     
     fUI = new MapUI();
     fDSP->buildUserInterface(fUI);
@@ -77,7 +221,7 @@ CFaust2Circle::CFaust2Circle(CInterruptSystem *pInterrupt, unsigned nSampleRate,
     if (fDSP->getNumInputs() > 0) {
         fInChannel = new float*[fDSP->getNumInputs()];
         for (int i = 0; i < fDSP->getNumInputs(); i++) {
-            fInChannel[i] = new float[AUDIO_BLOCK_SAMPLES];
+            fInChannel[i] = new float[nChunkSize/2];
         }
     } else {
         fInChannel = NULL;
@@ -87,7 +231,7 @@ CFaust2Circle::CFaust2Circle(CInterruptSystem *pInterrupt, unsigned nSampleRate,
     if (fDSP->getNumOutputs() > 0) {
         fOutChannel = new float*[fDSP->getNumOutputs()];
         for (int i = 0; i < fDSP->getNumOutputs(); i++) {
-            fOutChannel[i] = new float[AUDIO_BLOCK_SAMPLES];
+            fOutChannel[i] = new float[nChunkSize/2];
         }
     } else {
         fOutChannel = NULL;
@@ -134,18 +278,28 @@ unsigned CFaust2Circle::GetChunk (u32 *pBuffer, unsigned nChunkSize)
 
 	float fVolumeLevel = m_fVolume * m_nMaxLevel/2;
 
-	for (; nChunkSize > 0; nChunkSize -= 2)		// fill the whole buffer
+	fDSP->compute(nChunkSize/2,fInChannel, fOutChannel);
+
+	for (int j=0; j < nChunkSize/2; j++)		// fill the whole buffer
 	{
-		m_LFO.NextSample ();
-		m_VFO.NextSample ();
+		float fLevelLeft = fOutChannel[0][j];
+		float fLevelRight = fOutChannel[1][j];
 
-		float fLevel = m_VFO.GetOutputLevel ();
+		int nLevelLeft = (int) (fLevelLeft*fVolumeLevel + m_nNullLevel);
+		int nLevelRight = (int) (fLevelRight*fVolumeLevel + m_nNullLevel);
 
-		TYPE nLevel = (TYPE) (fLevel*fVolumeLevel + m_nNullLevel);
+		// Test L levels
+		if (nLevelLeft > (int) m_nMaxLevel){nLevelLeft = m_nMaxLevel;}
+		else if (nLevelLeft < 0){nLevelLeft = 0;}
 
-		*pBuffer++ = (u32) nLevel;
-		*pBuffer++ = (u32) nLevel;
+		// Test R levels 
+		if (nLevelRight > (int) m_nMaxLevel){nLevelRight = m_nMaxLevel;}
+		else if (nLevelRight < 0){nLevelRight = 0;}
+
+		*pBuffer++ = (u32) nLevelLeft;
+		*pBuffer++ = (u32) nLevelRight;
 	}
+
 
 #ifdef SHOW_STATUS
 	nTicks = CTimer::GetClockTicks () - nTicks;
@@ -160,3 +314,5 @@ unsigned CFaust2Circle::GetChunk (u32 *pBuffer, unsigned nChunkSize)
 	return nResult;
 }
 
+
+#endif
