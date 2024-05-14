@@ -34,7 +34,6 @@
 #include <circle/usb/usbhcidevice.h>
 #include <circle/sound/soundbasedevice.h>
 #include <circle/types.h>
-#include "oscillator.h"
 #include <circle/i2cmaster.h>
 #include <circle/sound/pwmsoundbasedevice.h>
 #include <circle/string.h>

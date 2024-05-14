@@ -77,5 +77,3 @@ private:
 protected:
 	float m_fVolume;
 };
-
-#endif
