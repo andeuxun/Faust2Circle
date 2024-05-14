@@ -11,6 +11,26 @@
 #include <circle/synchronize.h>
 
 
+#if WRITE_FORMAT == 0
+	#define FORMAT		SoundFormatUnsigned8
+	#define TYPE		u8
+	#define TYPE_SIZE	sizeof (u8)
+	#define FACTOR		((1 << 7)-1)
+	#define NULL_LEVEL	(1 << 7)
+#elif WRITE_FORMAT == 1
+	#define FORMAT		SoundFormatSigned16
+	#define TYPE		s16
+	#define TYPE_SIZE	sizeof (s16)
+	#define FACTOR		((1 << 15)-1)
+	#define NULL_LEVEL	0
+#elif WRITE_FORMAT == 2
+	#define FORMAT		SoundFormatSigned24
+	#define TYPE		s32
+	#define TYPE_SIZE	(sizeof (u8)*3)
+	#define FACTOR		((1 << 23)-1)
+	#define NULL_LEVEL	0
+#endif
+
 CFaust2Circle::CFaust2Circle(CInterruptSystem *pInterrupt, unsigned nSampleRate, unsigned nChunkSize) 
 :	CPWMSoundBaseDevice (pInterrupt, nSampleRate, nChunkSize),
 	m_VFO (&m_LFO),
