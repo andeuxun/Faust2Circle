@@ -18,7 +18,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 #include "circle.h"
-// #include "config.h"
+#include "config.h"
 #include <circle/sound/pwmsoundbasedevice.h>
 #include <circle/sound/i2ssoundbasedevice.h>
 #include <circle/sound/hdmisoundbasedevice.h>
@@ -28,6 +28,27 @@
 #include <assert.h>
 
 #include <circle/synchronize.h>
+
+
+#if WRITE_FORMAT == 0
+	#define FORMAT		SoundFormatUnsigned8
+	#define TYPE		u8
+	#define TYPE_SIZE	sizeof (u8)
+	#define FACTOR		((1 << 7)-1)
+	#define NULL_LEVEL	(1 << 7)
+#elif WRITE_FORMAT == 1
+	#define FORMAT		SoundFormatSigned16
+	#define TYPE		s16
+	#define TYPE_SIZE	sizeof (s16)
+	#define FACTOR		((1 << 15)-1)
+	#define NULL_LEVEL	0
+#elif WRITE_FORMAT == 2
+	#define FORMAT		SoundFormatSigned24
+	#define TYPE		s32
+	#define TYPE_SIZE	(sizeof (u8)*3)
+	#define FACTOR		((1 << 23)-1)
+	#define NULL_LEVEL	0
+#endif
 
 #ifdef USE_VCHIQ_SOUND
 	#include <vc4/sound/vchiqsoundbasedevice.h>
