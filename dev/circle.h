@@ -67,7 +67,6 @@ private:
 	unsigned m_nMaxLevel;
 	unsigned m_nNullLevel;
 
-	template <int INPUTS, int OUTPUTS>
 
     float** fInChannel;
     float** fOutChannel;
