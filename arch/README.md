@@ -9,7 +9,7 @@
 
 En faisant :
 
-* faust -a faust2circle.cpp X.dsp -e -o expended.dsp
+* faust -a faust2circle.cpp example.dsp -e -o expended.dsp
 * faust -a faust2circle expended.dsp -fm 'def' -o circle.cpp
 
 On obtient la nouvelle version de circle qui est ici
