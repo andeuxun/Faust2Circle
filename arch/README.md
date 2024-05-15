@@ -1,4 +1,5 @@
-## Options de compilation faust utiles :
+
+## Options de compilation faust utiles :
 
 -fm <file>  --fast-math <file>          use optimized versions of mathematical functions implemented in <file>, use 'faust/dsp/fastmath.cpp' when file is 'def', assume functions are defined in the architecture file when file is 'arch'.
 
