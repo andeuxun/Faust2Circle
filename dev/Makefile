@@ -26,6 +26,7 @@ LIBS	+= $(CIRCLEHOME)/lib/sched/libsched.a \
 LIBS	+= math.h \
 	   /usr/local/include/faust/dsp/fastmath.cpp
 
+# Lib from the expanded version of the dsp, might be toot much
 LIBS	+= /usr/local/share/faust/stdfaust.lib \
 	   /usr/local/share/faust/oscillators.lib \
 	   /usr/local/share/faust/maths.lib \
