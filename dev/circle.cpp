@@ -70,7 +70,6 @@ Compilation options: -a faust2circle.cpp -lang cpp -ct 1 -fm def -es 1 -mcd 16 -
 #define FAUSTFLOAT float
 #endif 
 
-#include "faust/dsp/fastmath.cpp"
 #include <math.h>
 
 #ifndef FAUSTCLASS 
