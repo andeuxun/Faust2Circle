@@ -23,6 +23,14 @@ LIBS	+= $(CIRCLEHOME)/lib/sched/libsched.a \
 	   $(CIRCLEHOME)/lib/fs/libfs.a \
 	   $(CIRCLEHOME)/lib/libcircle.a
 
+LIBS	+= math.h \
+	   /usr/local/include/faust/dsp/fastmath.cpp
+
+LIBS	+= /usr/local/share/faust/stdfaust.lib \
+	   /usr/local/share/faust/oscillators.lib \
+	   /usr/local/share/faust/maths.lib \
+	   /usr/local/share/faust/platform.lib
+
 include ../Rules.mk
 
 -include $(DEPS)
