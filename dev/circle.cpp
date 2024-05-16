@@ -1,7 +1,8 @@
 /* ------------------------------------------------------------
 name: "example"
+version: "2.72.16"
 Code generated with Faust 2.72.16 (https://faust.grame.fr)
-Compilation options: -a faust2circle.cpp -lang cpp -ct 1 -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
+Compilation options: -a faust2circle.cpp -lang cpp -ct 1 -fm def -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0
 ------------------------------------------------------------ */
 
 #ifndef  __mydsp_H__
@@ -69,9 +70,7 @@ Compilation options: -a faust2circle.cpp -lang cpp -ct 1 -es 1 -mcd 16 -mdd 1024
 #define FAUSTFLOAT float
 #endif 
 
-#include <algorithm>
-#include <cmath>
-#include <cstdint>
+#include "faust/dsp/fastmath.cpp"
 #include <math.h>
 
 #ifndef FAUSTCLASS 
@@ -105,20 +104,25 @@ class mydsp : public dsp {
 	mydsp() {}
 
 	void metadata(Meta* m) { 
-		m->declare("compile_options", "-a faust2circle.cpp -lang cpp -ct 1 -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0");
-		m->declare("filename", "example.dsp");
-		m->declare("maths.lib/author", "GRAME");
-		m->declare("maths.lib/copyright", "GRAME");
-		m->declare("maths.lib/license", "LGPL with exception");
-		m->declare("maths.lib/name", "Faust Math Library");
-		m->declare("maths.lib/version", "2.8.0");
+		m->declare("compile_options", "-a faust2circle.cpp -lang cpp -ct 1 -fm def -es 1 -mcd 16 -mdd 1024 -mdy 33 -single -ftz 0");
+		m->declare("filename", "expanded.dsp");
+		m->declare("library_path0", "/usr/local/share/faust/stdfaust.lib");
+		m->declare("library_path1", "/usr/local/share/faust/oscillators.lib");
+		m->declare("library_path2", "/usr/local/share/faust/maths.lib");
+		m->declare("library_path3", "/usr/local/share/faust/platform.lib");
+		m->declare("maths_lib_author", "GRAME");
+		m->declare("maths_lib_copyright", "GRAME");
+		m->declare("maths_lib_license", "LGPL with exception");
+		m->declare("maths_lib_name", "Faust Math Library");
+		m->declare("maths_lib_version", "2.8.0");
 		m->declare("name", "example");
-		m->declare("oscillators.lib/name", "Faust Oscillator Library");
-		m->declare("oscillators.lib/saw2ptr:author", "Julius O. Smith III");
-		m->declare("oscillators.lib/saw2ptr:license", "STK-4.3");
-		m->declare("oscillators.lib/version", "1.5.1");
-		m->declare("platform.lib/name", "Generic Platform Library");
-		m->declare("platform.lib/version", "1.3.0");
+		m->declare("oscillators_lib_name", "Faust Oscillator Library");
+		m->declare("oscillators_lib_saw2ptr_author", "Julius O. Smith III");
+		m->declare("oscillators_lib_saw2ptr_license", "STK-4.3");
+		m->declare("oscillators_lib_version", "1.5.1");
+		m->declare("platform_lib_name", "Generic Platform Library");
+		m->declare("platform_lib_version", "1.3.0");
+		m->declare("version", "2.72.16");
 	}
 
 	virtual int getNumInputs() {
@@ -177,7 +181,7 @@ class mydsp : public dsp {
 	virtual void compute(int count, FAUSTFLOAT** RESTRICT inputs, FAUSTFLOAT** RESTRICT outputs) {
 		FAUSTFLOAT* output0 = outputs[0];
 		FAUSTFLOAT* output1 = outputs[1];
-		float fSlow0 = std::max<float>(1.1920929e-07f, std::fabs(float(fHslider0)));
+		float fSlow0 = std::max<float>(1.1920929e-07f, fast_fabsf(float(fHslider0)));
 		float fSlow1 = fConst1 * fSlow0;
 		float fSlow2 = 1.0f - fConst0 / fSlow0;
 		float fSlow3 = float(fHslider1);
