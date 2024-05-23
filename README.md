@@ -31,9 +31,11 @@ If we remove this include from the file, the project successfuly compiles but se
 
 <br>
 
+<a name="secCompFaust"> </a>
+
 ### Compiling Faust dsp with the faust2circle.cpp architecture file :
 ---
-<a name="secCompFaust"> </a>
+
 
 
 1. Set up the [Faust compiler](https://github.com/grame-cncm/faust/wiki/BuildingSimple) on your computer
@@ -48,9 +50,11 @@ faust -fm "def" -a arch/faust2circle.cpp expended.dsp -o circle.cpp
 ```
 <br>
 
+<a name="secCompCircle"> </a>
+
 ### Compiling the circle project
 ---
-<a name="secCompCircle"> </a>
+
 
 1. Replace the current circle.cpp file in the dev folder with the one created above
 
