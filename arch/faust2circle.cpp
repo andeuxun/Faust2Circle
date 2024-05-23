@@ -141,8 +141,38 @@ unsigned CFaust2Circle::GetChunk (u32 *pBuffer, unsigned nChunkSize)
 
 	float fVolumeLevel = m_fVolume * m_nMaxLevel/2;
 
-	fDSP->compute(nChunkSize/2,fInChannel, fOutChannel);
+	// Manage input, remove comment to test after completing
+	/*
+	for (int i=0; i < nChunkSize/2; i++)		// fill the input buffers
+	{
+		// Get sound from inputs
+		s16 sLevelLeft = (s16) m_nNullLevel;
+		s16 sLevelRight = (s16) m_nNullLevel;
 
+		// Transition to floats
+		fLevelLeft = 0 ; // CONVERSION NEEDED
+		fLevelRight = 0 ; // COVERSION NEEDED
+
+		// Normalise levels
+		float nLevelLeft = (float) (fLevelLeft*fVolumeLevel + m_nNullLevel);
+		float nLevelRight = (float) (fLevelRight*fVolumeLevel + m_nNullLevel);
+
+		// Test L levels
+		if (nLevelLeft > (float) m_nMaxLevel){nLevelLeft = m_nMaxLevel;}
+		else if (nLevelLeft < 0.0){nLevelLeft = 0.0;}
+
+		// Test R levels 
+		if (nLevelRight > (float) m_nMaxLevel){nLevelRight = m_nMaxLevel;}
+		else if (nLevelRight < 0.0){nLevelRight = 0.0;}
+
+		fInChannel[0][i] = nLevelLeft;
+		fInChannel[1][i] = nLevelRight;
+
+	}
+	*/
+
+	fDSP->compute(nChunkSize/2,fInChannel, fOutChannel);
+	
 	for (int j=0; j < nChunkSize/2; j++)		// fill the whole buffer
 	{
 		float fLevelLeft = fOutChannel[0][j];
